@@ -16,6 +16,8 @@ List<ConnectivityResult> parseConnectivityResults(List<String> states) {
         return ConnectivityResult.vpn;
       case 'other':
         return ConnectivityResult.other;
+      case 'p2p_wifi':
+        return ConnectivityResult.p2pWifi;
       default:
         return ConnectivityResult.none;
     }

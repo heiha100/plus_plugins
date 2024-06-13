@@ -6,6 +6,9 @@ enum ConnectivityResult {
   /// WiFi: Device connected via Wi-Fi
   wifi,
 
+  // P2P WiFi: Device connected via peer-to-peer Wi-Fi
+  p2pWifi,
+
   /// Ethernet: Device connected to ethernet network
   ethernet,
 

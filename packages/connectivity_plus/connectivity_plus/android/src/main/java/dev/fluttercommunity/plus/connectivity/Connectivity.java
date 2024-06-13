@@ -17,6 +17,7 @@ import java.util.List;
 public class Connectivity {
   static final String CONNECTIVITY_NONE = "none";
   static final String CONNECTIVITY_WIFI = "wifi";
+  static final String CONNECTIVITY_P2P_WIFI = "p2p_wifi";
   static final String CONNECTIVITY_MOBILE = "mobile";
   static final String CONNECTIVITY_ETHERNET = "ethernet";
   static final String CONNECTIVITY_BLUETOOTH = "bluetooth";
@@ -49,8 +50,7 @@ public class Connectivity {
   @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
   List<String> getCapabilitiesList(NetworkCapabilities capabilities) {
     List<String> types = new ArrayList<>();
-    if (capabilities == null
-        || !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+    if (capabilities == null) {
       types.add(CONNECTIVITY_NONE);
       return types;
     }
@@ -70,11 +70,14 @@ public class Connectivity {
     if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)) {
       types.add(CONNECTIVITY_BLUETOOTH);
     }
+    if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_WIFI_P2P)) {
+      types.add(CONNECTIVITY_P2P_WIFI);
+    }
     if (types.isEmpty()
         && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
       types.add(CONNECTIVITY_OTHER);
     }
-    if (types.isEmpty()) {
+    if (types.isEmpty() || !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
       types.add(CONNECTIVITY_NONE);
     }
     return types;
@@ -85,7 +88,7 @@ public class Connectivity {
     // handle type for Android versions less than Android 6
     android.net.NetworkInfo info = connectivityManager.getActiveNetworkInfo();
     List<String> types = new ArrayList<>();
-    if (info == null || !info.isConnected()) {
+    if (info == null) {
       types.add(CONNECTIVITY_NONE);
       return types;
     }
@@ -109,8 +112,14 @@ public class Connectivity {
       case ConnectivityManager.TYPE_MOBILE_HIPRI:
         types.add(CONNECTIVITY_MOBILE);
         break;
+      case 13:
+        types.add(CONNECTIVITY_P2P_WIFI);
+        break;
       default:
         types.add(CONNECTIVITY_OTHER);
+    }
+    if (types.isEmpty() || !info.isConnected()) {
+      types.add(CONNECTIVITY_NONE);
     }
     return types;
   }
