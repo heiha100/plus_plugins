@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
 import java.util.List;
+import android.util.Log;
 
 /** Reports connectivity related information such as connectivity type and wifi information. */
 public class Connectivity {
@@ -49,6 +50,7 @@ public class Connectivity {
   @NonNull
   @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
   List<String> getCapabilitiesList(NetworkCapabilities capabilities) {
+      Log.d("Connectivity", "getCapabilitiesList: " + capabilities);
     List<String> types = new ArrayList<>();
     if (capabilities == null) {
       types.add(CONNECTIVITY_NONE);
